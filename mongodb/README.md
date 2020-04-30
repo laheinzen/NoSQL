@@ -1,7 +1,13 @@
+
 # MongoDB
-# docker volume create --name=mongodata
-# docker run -d -p 27017-27019:27017-27019 --name mongodb -v mongodata:/data/db mongo
-# sudo docker exec -it mongodb bash
+
+## Preparando o banco
+
+```bash
+docker volume create --name=mongodata 
+docker run -d -p 27017-27019:27017-27019 --name mongodb -v mongodata:/data/db mongo
+sudo docker exec -it mongodb bash
+```
 
 
 # Exercício 1- Aquecendo com os pets
