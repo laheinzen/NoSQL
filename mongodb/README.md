@@ -41,25 +41,32 @@ Insira os seguintes registros no MongoDB e em seguida responda as questões abai
 
 > WriteResult({ "nInserted" : 1 })
 
+### 1. Adicione outro Peixe e um Hamster com nome Frodo
 
-# 1. Adicione outro Peixe e um Hamster com nome Frodo
-> db.pets.insert({name: "Frodo", species: "Peixe"})
-# WriteResult({ "nInserted" : 1 })
-> db.pets.insert({name: "Frodo", species: "Hamster"})
-# WriteResult({ "nInserted" : 1 })
+`db.pets.insert({name: "Frodo", species: "Peixe"})`
 
-# 2. Faça uma contagem dos pets na coleção
-> db.pets.count()
-# 8 
+> WriteResult({ "nInserted" : 1 })
 
-# 3. Retorne apenas um elemento o método prático possível
-> db.pets.findOne()
-#  {
-#        "_id" : ObjectId("5ea904df836b1cf0412da7a3"),
-#        "name" : "Mike",
-#        "species" : "Hamster"
-# }
-# PS - Esqueci de coletar a saída na primeira vez em rodei. Acho que não era esse o objeto que retornava
+`db.pets.insert({name: "Frodo", species: "Hamster"})`
+
+> WriteResult({ "nInserted" : 1 })
+
+### 2. Faça uma contagem dos pets na coleção
+
+`db.pets.count()`
+
+> 8
+
+### 3. Retorne apenas um elemento o método prático possível
+
+`db.pets.findOne()`
+
+> {
+>         "_id" : ObjectId("5ea904df836b1cf0412da7a3"),
+>         "name" : "Mike",
+>         "species" : "Hamster"
+>  }
+PS: Esqueci de coletar a saída na primeira vez em rodei. Acho que não era esse o objeto que retornava
 
 # 4. Identifique o ID para o Gato Kilha.
 > db.pets.find({"name": "Kilha", "species": "Gato"},{_id: 1} )
