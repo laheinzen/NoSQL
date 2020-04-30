@@ -62,14 +62,14 @@ Insira os seguintes registros no MongoDB e em seguida responda as questões abai
 `db.pets.findOne()`
 
 > {
-
+>
 >         "_id" : ObjectId("5ea904df836b1cf0412da7a3"),
-
+> 
 >         "name" : "Mike",
-
+> 
 >         "species" : "Hamster"
-
->  }
+>
+> }
 
 PS: Esqueci de coletar a saída na primeira vez em rodei. Acho que não era esse o objeto que retornava
 
