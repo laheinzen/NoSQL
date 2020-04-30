@@ -71,6 +71,7 @@ PS: Esqueci de coletar a saída na primeira vez em rodei. Acho que não era esse
 
 ```javascript
 var iDForMikeTheHamster = db.pets.findOne({"name": "Mike", "species": "Hamster"},{_id: 1})
+
 db.pets.find({_id: iDForMikeTheHamster._id})
 ``` 
 > "_id" : ObjectId("5ea904df836b1cf0412da7a3"), "name" : "Mike", "species" : "Hamster" }
