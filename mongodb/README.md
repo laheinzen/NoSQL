@@ -53,6 +53,7 @@ Insira os seguintes registros no MongoDB e em seguida responda as questões abai
 
 `db.pets.findOne()`
 
+> {
 >
 >         "_id" : ObjectId("5eaa45efe82b4e5aeb093981"),
 > 
