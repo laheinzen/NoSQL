@@ -230,11 +230,8 @@ Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso d
 
 `db.italians.find({"surname":"Rossi"}, {_id:0,"firstname":1,"age":1}).sort({"age":-1, "firstname":1}).limit(5)`
 > { "firstname" : "Enzo ", "age" : 79 }
->
 > { "firstname" : "Giacomo", "age" : 79 }
->
 > { "firstname" : "Riccardo", "age" : 79 }
->
 > { "firstname" : "Angelo", "age" : 78 }
 > { "firstname" : "Michela", "age" : 78 }
 
