@@ -122,6 +122,7 @@ Pessoas sem data de nascimento cadastrada
 ### Exercise 4.7: Retrieve all people related to movies where the relationship has a property
 
 Todos os papéis em filmes
+
 `MATCH (p:Person)-[relationship]->(m:Movie) WHERE exists(relationship.roles) RETURN p, relationship, m`
 
 ### Exercise 4.8: Retrieve all actors whose name begins with James
@@ -155,6 +156,7 @@ Todas as críticas que contém a palavra 'cool'
 ### Exercise 5.1: Retrieve data using multiple MATCH patterns
 
 Filmes onde Tom Hanks atuou, com nome do diretor e outros atores
+
 `MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person), (aa:Person)-[:ACTED_IN]->(m) WHERE a.name = 'Tom Hanks' RETURN m, d, aa`
 
 ### Exercise 5.2: Retrieve particular nodes that have a relationship
@@ -176,16 +178,19 @@ Filmes onde Tom Hanks atuou, com nome do diretor e outros atores
 ### Exercise 5.6: Specify optional data to be retrieved during the query
 
 Filmes onde 'Tom' atuou e opcionalmente 'Tom' dirigiu
+
 `MATCH (p:Person) WHERE p.name STARTS WITH 'Tom' OPTIONAL MATCH (p)-[:DIRECTED]->(m:Movie) RETURN p, m`
 
 ### Exercise 5.7: Retrieve nodes by collecting a list
 
 Atores e seus filmes
+
 `MATCH (a:Person)-[:ACTED_IN]->(m:Movie) RETURN a , collect(m)`
 
 ### 5.8: Retrieve all movies that Tom Cruise has acted in and the co-actors that acted in the same movie by collecting a list
 
 Esse aqui tive não estava no PDF, mas não foi difícil de achar
+
 `MATCH (t:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a:Person) WHERE t.name ='Tom Cruise' RETURN m, collect(a)`
 
 ### Exercise 5.9: Retrieve nodes as lists and return data associated with the corresponding lists
