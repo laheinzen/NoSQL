@@ -252,7 +252,71 @@ Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso d
 
 ### 15. Passou um ano. Atualize a idade de todos os italianos e dos bichanos em 1
 
+```javascript
+var allItalians = db.italians.find()
+allItalians.forEach(
+    function(italian)
+    {
+        db.italians.update(
+            {_id:italian._id},
+            {$inc:{age:1}}
+        );
+        //Se tem bichando, envelhece
+        if(italian.cat){
+            db.italians.update(
+                {_id:italian._id},
+                {$inc:{"cat.age":1}}
+            )
+        }
+        //"bichano" parece ser apenas para gato. Mas cães também envelhecem
+        if(italian.dog){
+            db.italians.update(
+                {_id:italian._id},
+                {$inc:{"dog.age":1}}
+            )
+        }
+        //E se ele tem um leão?
+        if(italian.lion){
+            db.italians.update(
+                {_id:italian._id},
+                {$inc:{"lion.age":1}}
+            )
+        }
+        //Os pais envelhecem?
+        if(italian.father){
+            db.italians.update(
+                {_id:italian._id},
+                {$inc:{"father.age":1}}
+            )
+        }
+        //Mães também certo? Como presente para dias mães que está chegando, podíamos deixar quieto né?
+        if(italian.mother){
+            db.italians.update(
+                {_id:italian._id},
+                {$inc:{"mother.age":1}}
+            )
+        }
+    }
+)
+```
+>
+
+Como usei o cursor, não trouxe retorno. Mas se eu buscar com por um dos italianos retornados anteriormente, noto que todas as idades foram atualizadas.
+
+Alternativamente, podemos usar o updateMany
+
+`db.italians.updateMany({}, {$inc:{"age":1}})`
+> { "acknowledged" : true, "matchedCount" : 10001, "modifiedCount" : 10000 }
+
+`db.italians.updateMany({"cat":{$exists:true}}, {$inc:{'cat.age':1}})`
+> { "acknowledged" : true, "matchedCount" : 6037, "modifiedCount" : 6037 }
+
+E por aí vai.
+
 ### 16. O Corona Vírus chegou na Itália e misteriosamente atingiu pessoas somente com gatos e de 66 anos. Remova esses italianos
+
+`db.italians.deleteMany({"age":{$eq:66},"cat":{$exists:true}})`
+> { "acknowledged" : true, "deletedCount" : 75 }
 
 ### 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro
 
