@@ -309,7 +309,7 @@ Como usei o cursor, não trouxe retorno. Mas se eu buscar com por um dos italian
 Alternativamente, podemos usar o updateMany
 
 `db.italians.updateMany({}, {$inc:{"age":1}})`
-> { "acknowledged" : true, "matchedCount" : 10001, "modifiedCount" : 10000 }
+> { "acknowledged" : true, "matchedCount" : 10000, "modifiedCount" : 10000 }
 
 `db.italians.updateMany({"cat":{$exists:true}}, {$inc:{'cat.age':1}})`
 > { "acknowledged" : true, "matchedCount" : 6037, "modifiedCount" : 6037 }
