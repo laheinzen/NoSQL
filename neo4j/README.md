@@ -49,11 +49,21 @@
 
 ### Exercise 2.3: Query the database for all property keys
 
+`call db.propertyKeys()`
+
 ### Exercise 2.4: Retrieve all Movies released in a specific year, returning their titles
+
+`MATCH (n:Movie {released: 2000}) RETURN n.title`
 
 ### Exercise 2.5: Display title, released, and tagline values for every Movie node in the graph
 
+`MATCH (n:Movie) RETURN n.title, n.released, n.tagline`
+
 ### Exercise 2.6: Display more user-friendly headers in the table
+
+```javascript
+MATCH (n:Movie) RETURN n.title AS `Movie Title`, n.released AS `Release Year`, n.tagline As Tagline
+```
 
 ## Exercício 3 - Filtering queries using relationships
 
