@@ -135,7 +135,7 @@ Primeiro trazemos apenas cinco, para não ser muita coisa
 
 Agora contamos quantos retornam
 
-`db.italians.find({ $where: "this.cat && this.dog" }).count()`
+`db.italians.count({ $where: "this.cat && this.dog" })`
 > 2431
 
 ### 8. Liste todas as pessoas mais novas que seus respectivos gatos
@@ -152,12 +152,13 @@ Primeiro trazemos apenas cinco, para não ser muita coisa
 
 Agora contamos quantos retornam
 
-`db.italians.find({ $where: "this.cat != null && this.age < this.cat.age" }).count()`
+`db.italians.count({ $where: "this.cat != null && this.age < this.cat.age" })`
 > 675
 
 ### 9. Liste as pessoas que tem o mesmo nome que seu bichano (gatou ou cachorro)
 
 Primeiro limitamos a cinco documentos
+
 `db.italians.find({ $where: "(this.cat != null && this.firstname == this.cat.name) || (this.dog != null && this.firstname == this.dog.name)" }).limit(5)`
 > { "_id" : ObjectId("5eab602a9fb59243e5f97e3d"), "firstname" : "Mattia", "surname" : "Conti", "username" : "user122", "age" : 45, "email" : "Mattia.Conti@outlook.com", "bloodType" : "AB-", "id_num" : "138306201627", "registerDate" : ISODate("2008-04-04T22:42:55.168Z"), "ticketNumber" : 9040, "jobs" : [ "Eletrotécnica Industrial", "Publicidade e Propaganda" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Gladiador (2000)", "rating" : 4.88 }, { "title" : "O Senhor dos Anéis: O Retorno do Rei (2003)", "rating" : 1.56 }, { "title" : "1917 (2019)", "rating" : 4.54 }, { "title" : "Batman: O Cavaleiro das Trevas (2008)", "rating" : 1.3 } ], "father" : { "firstname" : "Paolo", "surname" : "Conti", "age" : 72 }, "cat" : { "name" : "Mattia", "age" : 6 }, "dog" : { "name" : "Sara", "age" : 3 } }
 { "_id" : ObjectId("5eab602a9fb59243e5f97e80"), "firstname" : "Paolo", "surname" : "Sartori", "username" : "user189", "age" : 54, "email" : "Paolo.Sartori@uol.com.br", "bloodType" : "AB-", "id_num" : "043468786457", "registerDate" : ISODate("2014-06-16T21:15:41.861Z"), "ticketNumber" : 691, "jobs" : [ "Produção Têxtil", "Ciências do Consumo" ], "favFruits" : [ "Uva" ], "movies" : [ { "title" : "Guerra nas Estrelas (1977)", "rating" : 4.07 }, { "title" : "Intocáveis (2011)", "rating" : 0.29 }, { "title" : "A Viagem de Chihiro (2001)", "rating" : 0.71 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 2.24 }, { "title" : "Matrix (1999)", "rating" : 1.69 } ], "cat" : { "name" : "Paolo", "age" : 15 } }
@@ -165,15 +166,55 @@ Primeiro limitamos a cinco documentos
 { "_id" : ObjectId("5eab602a9fb59243e5f97ff5"), "firstname" : "Cristina", "surname" : "Caruso", "username" : "user562", "age" : 32, "email" : "Cristina.Caruso@hotmail.com", "bloodType" : "O-", "id_num" : "153057755511", "registerDate" : ISODate("2010-10-05T22:34:30.372Z"), "ticketNumber" : 5149, "jobs" : [ "Ciência da Computação", "Engenharia de Petróleo" ], "favFruits" : [ "Goiaba" ], "movies" : [ { "title" : "Star Wars, Episódio V: O Império Contra-Ataca (1980)", "rating" : 4.03 }, { "title" : "Cidade de Deus (2002)", "rating" : 2.5 }, { "title" : "Pulp Fiction: Tempo de Violência (1994)", "rating" : 0.25 }, { "title" : "Um Estranho no Ninho (1975)", "rating" : 3.01 }, { "title" : "A Vida é Bela (1997)", "rating" : 2.44 } ], "father" : { "firstname" : "Pietro", "surname" : "Caruso", "age" : 68 }, "cat" : { "name" : "Cristina", "age" : 10 }, "dog" : { "name" : "Gianluca", "age" : 13 } }
 { "_id" : ObjectId("5eab602a9fb59243e5f98028"), "firstname" : "Giorgio", "surname" : "Caruso", "username" : "user613", "age" : 62, "email" : "Giorgio.Caruso@uol.com.br", "bloodType" : "O+", "id_num" : "664840121000", "registerDate" : ISODate("2016-03-18T05:33:11.112Z"), "ticketNumber" : 5110, "jobs" : [ "Artes Visuais", "Sistemas Elétricos" ], "favFruits" : [ "Mamão", "Kiwi", "Goiaba" ], "movies" : [ { "title" : "Três Homens em Conflito (1966)", "rating" : 3.01 }, { "title" : "Matrix (1999)", "rating" : 1.55 } ], "cat" : { "name" : "Giorgio", "age" : 14 }, "dog" : { "name" : "Claudio", "age" : 1 } }
 
-Agora contamos quantos são 
-`db.italians.find({ $where: "(this.cat != null && this.firstname == this.cat.name) || (this.dog != null && this.firstname == this.dog.name)" }).count()`
+Agora contamos quantos são
+
+`db.italians.count({ $where: "(this.cat != null && this.firstname == this.cat.name) || (this.dog != null && this.firstname == this.dog.name)" })`
 > 115
 
 ### 10. Projete apenas o nome e sobrenome das pessoas com tipo de sangue de fator RH negativo
 
+Limitando a cinco documentos
+
+`db.italians.find({"bloodType":{$regex:/\-$/}},{"firstname":1,"surname":1,"bloodType":1, _id: 0}).limit(5)`
+> { "firstname" : "Mario", "surname" : "De Santis", "bloodType" : "B-" }
+{ "firstname" : "Marta", "surname" : "Montanari", "bloodType" : "O-" }
+{ "firstname" : "Federico", "surname" : "Marchetti", "bloodType" : "O-" }
+{ "firstname" : "Elisa", "surname" : "De Santis", "bloodType" : "A-" }
+{ "firstname" : "Anna", "surname" : "Silvestri", "bloodType" : "B-" }
+
+Contando total
+
+`db.italians.count({"bloodType":{$regex:/\-$/}},{"firstname":1,"surname":1,"bloodType":1, _id: 0})`
+> 4942
+
+PS: Notei que o 2.11 especifica que não é para colocar o id. Esse aqui,diz que é apenas para lista nome e sobrenome. Assumi que não era pra listar o id. Caso se queira, basta omitir o ', _id: 0'
+
 ### 11. Projete apenas os animais dos italianos. Devem ser listados os animais com nome e  idade. Não mostre o identificado do mongo (ObjectId)
 
+Listando cinco documentos
+
+`db.italians.find ( { $or: [{ "cat": { $exists: true } }, { "dog": { $exists: true } } ] } , { "cat":1, "dog":1, _id: 0}).limit(5)`
+> { "cat" : { "name" : "Antonella", "age" : 5 } }
+{ "dog" : { "name" : "Luca", "age" : 6 } }
+{ "dog" : { "name" : "Ilaria", "age" : 1 } }
+{ "cat" : { "name" : "Claudio", "age" : 10 } }
+{ "cat" : { "name" : "Stefano", "age" : 9 }, "dog" : { "name" : "Mario", "age" : 16 } }
+
+Contando número de documentos
+
+`db.italians.count ( { $or: [{ "cat": { $exists: true } }, { "dog": { $exists: true } } ] } , { "cat":1, "dog":1, _id: 0})`
+> 7653
+
 ### 12. Quais são as 5 pessoas mais velhas com sobrenome Rossi?
+
+Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso de empate, ordem alfabética
+
+`db.italians.find({"surname":"Rossi"}, {_id:0,"firstname":1,"age":1}).sort({"age":-1, "firstname":1}).limit(5)`
+> { "firstname" : "Enzo ", "age" : 79 }
+{ "firstname" : "Giacomo", "age" : 79 }
+{ "firstname" : "Riccardo", "age" : 79 }
+{ "firstname" : "Angelo", "age" : 78 }
+{ "firstname" : "Michela", "age" : 78 }
 
 ### 13. Crie um italiano que tenha um leão como animal de estimação. Associe um nome e idade ao bichano
 
