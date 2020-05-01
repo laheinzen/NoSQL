@@ -134,12 +134,14 @@ Primeiro trazemos apenas cinco, para não ser muita coisa
 { "_id" : ObjectId("5eab602a9fb59243e5f97e3d"), "firstname" : "Mattia", "surname" : "Conti", "username" : "user122", "age" : 45, "email" : "Mattia.Conti@outlook.com", "bloodType" : "AB-", "id_num" : "138306201627", "registerDate" : ISODate("2008-04-04T22:42:55.168Z"), "ticketNumber" : 9040, "jobs" : [ "Eletrotécnica Industrial", "Publicidade e Propaganda" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Gladiador (2000)", "rating" : 4.88 }, { "title" : "O Senhor dos Anéis: O Retorno do Rei (2003)", "rating" : 1.56 }, { "title" : "1917 (2019)", "rating" : 4.54 }, { "title" : "Batman: O Cavaleiro das Trevas (2008)", "rating" : 1.3 } ], "father" : { "firstname" : "Paolo", "surname" : "Conti", "age" : 72 }, "cat" : { "name" : "Mattia", "age" : 6 }, "dog" : { "name" : "Sara", "age" : 3 } }
 
 Agora contamos quantos retornam
+
 `db.italians.find({ $where: "this.cat && this.dog" }).count()`
 > 2431
 
 ### 8. Liste todas as pessoas mais novas que seus respectivos gatos
 
 Primeiro trazemos apenas cinco, para não ser muita coisa
+
 `db.italians.find({ $where: "this.cat != null && this.age < this.cat.age" }).limit(5)`
 > { "_id" : ObjectId("5eab602a9fb59243e5f97e46"), "firstname" : "Valeira", "surname" : "Palmieri", "username" : "user131", "age" : 8, "email" : "Valeira.Palmieri@gmail.com", "bloodType" : "O+", "id_num" : "473813786015", "registerDate" : ISODate("2009-11-15T05:55:31.349Z"), "ticketNumber" : 6904, "jobs" : [ "Alimentos", "Mecatrônica Industrial" ], "favFruits" : [ "Laranja", "Banana", "Banana" ], "movies" : [ { "title" : "Vingadores: Ultimato (2019)", "rating" : 2.2 } ], "cat" : { "name" : "Domenico", "age" : 11 } }
 { "_id" : ObjectId("5eab602a9fb59243e5f97e4b"), "firstname" : "Valentina", "surname" : "Ferraro", "username" : "user136", "age" : 12, "email" : "Valentina.Ferraro@live.com", "bloodType" : "AB+", "id_num" : "755153755013", "registerDate" : ISODate("2017-04-11T05:18:22.356Z"), "ticketNumber" : 2225, "jobs" : [ "Gestão Pública", "Banco de Dados" ], "favFruits" : [ "Melancia", "Kiwi" ], "movies" : [ { "title" : "A Felicidade Não se Compra (1946)", "rating" : 1.33 }, { "title" : "1917 (2019)", "rating" : 2.17 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 1.11 }, { "title" : "Intocáveis (2011)", "rating" : 3.1 }, { "title" : "Seven: Os Sete Crimes Capitais (1995)", "rating" : 2.21 } ], "father" : { "firstname" : "Daniela", "surname" : "Ferraro", "age" : 31 }, "cat" : { "name" : "Salvatore", "age" : 15 } }
@@ -148,6 +150,7 @@ Primeiro trazemos apenas cinco, para não ser muita coisa
 { "_id" : ObjectId("5eab602a9fb59243e5f97e6b"), "firstname" : "Antonio", "surname" : "Neri", "username" : "user168", "age" : 3, "email" : "Antonio.Neri@gmail.com", "bloodType" : "B-", "id_num" : "171588556214", "registerDate" : ISODate("2019-01-02T12:28:53.707Z"), "ticketNumber" : 1764, "jobs" : [ "Oftálmica" ], "favFruits" : [ "Tangerina", "Pêssego" ], "movies" : [ { "title" : "Um Sonho de Liberdade (1994)", "rating" : 1.35 }, { "title" : "Três Homens em Conflito (1966)", "rating" : 0.07 } ], "cat" : { "name" : "Salvatore", "age" : 4 }, "dog" : { "name" : "Sergio", "age" : 16 } }
 
 Agora contamos quantos retornam
+
 `db.italians.find({ $where: "this.cat != null && this.age < this.cat.age" }).count()`
 > 675
 
