@@ -462,31 +462,36 @@ Limitando a cinco documentos
 ```javascript
 db.italians.find({
     $and: [
-        { $or: [ { "favFruits": ["Banana"] }, { "favFruits": ["Maçã"] } ] } ,
+        { "favFruits": {"$in" : ["Banana","Maçã"] } },
         { $or: [ { "dog": { $exists: true } }, { "cat": { $exists: true } } ] } ,
         { "age": { $gt: 20 } }, { "age": { $lt: 60 } }
-    ]
-}).limit(5)
+    ]},
+    { "firstName": 1, "surname": true, "age": true, "cat": true, "dog":true, "favFruits": true}
+    ).limit(5)
 ```
 
 >
->{ "_id" : ObjectId("5eab602a9fb59243e5f97e3d"), "firstname" : "Mattia", "surname" : "Conti", "username" : "user122", "age" : 50, "email" : "Mattia.Conti@outlook.com", "bloodType" : "AB-", "id_num" : "138306201627", "registerDate" : ISODate("2008-04-04T22:42:55.168Z"), "ticketNumber" : 9040, "jobs" : [ "Eletrotécnica Industrial", "Publicidade e Propaganda" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Gladiador (2000)", "rating" : 4.88 }, { "title" : "O Senhor dos Anéis: O Retorno do Rei (2003)", "rating" : 1.56 }, { "title" : "1917 (2019)", "rating" : 4.54 }, { "title" : "Batman: O Cavaleiro das Trevas (2008)", "rating" : 1.3 } ], "father" : { "firstname" : "Paolo", "surname" : "Conti", "age" : 73 }, "cat" : { "name" : "Mattia", "age" : 11 }, "dog" : { "name" : "Sara", "age" : 7 } }
+>{ "_id" : ObjectId("5eab60299fb59243e5f97e2e"), "surname" : "De Santis", "age" : 37, "favFruits" : [ "Pêssego", "Banana", "Maçã" ], "cat" : { "name" : "Claudio", "age" : 14 } }
 >
->{ "_id" : ObjectId("5eab602a9fb59243e5f97e69"), "firstname" : "Patrizia", "surname" : "Sala", "username" : "user166", "age" : 23, "email" : "Patrizia.Sala@live.com", "bloodType" : "AB+", "id_num" : "011850278304", "registerDate" : ISODate("2011-10-04T00:56:43.376Z"), "ticketNumber" : 582, "jobs" : [ "Eletrônica Industrial", "Gestão da Informação" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Um Estranho no Ninho (1975)", "rating" : 4.68 } ], "father" : { "firstname" : "Angelo", "surname" : "Sala", "age" : 40 }, "dog" : { "name" : "Eleonora", "age" : 16 } }
+>{ "_id" : ObjectId("5eab60299fb59243e5f97e2f"), "surname" : "Silvestri", "age" : 53, "favFruits" : [ "Mamão", "Banana" ], "cat" : { "name" : "Stefano", "age" : 13 }, "dog" : { "name" : "Mario", "age" : 19 } }
 >
->{ "_id" : ObjectId("5eab602a9fb59243e5f97e9a"), "firstname" : "Barbara", "surname" : "Vitali", "username" : "user215", "age" : 36, "email" : "Barbara.Vitali@hotmail.com", "bloodType" : "B-", "id_num" : "663142587063", "registerDate" : ISODate("2014-09-24T06:17:21.693Z"), "ticketNumber" : 3378, "jobs" : [ "Conservação e Restauro" ], "favFruits" : [ "Maçã" ], "movies" : [ { "title" : "Três Homens em Conflito (1966)", "rating" : 2.1 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 3.35 }, { "title" : "Pulp Fiction: Tempo de Violência (1994)", "rating" : 1.23 }, { "title" : "Pulp Fiction: Tempo de Violência (1994)", "rating" : 4.29 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 0.38 } ], "dog" : { "name" : "Paola", "age" : 17 } }
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e34"), "surname" : "Carbone", "age" : 32, "favFruits" : [ "Banana", "Pêssego", "Maçã" ], "cat" : { "name" : "Elena", "age" : 5 } }
 >
->{ "_id" : ObjectId("5eab602a9fb59243e5f97eb3"), "firstname" : "Sara", "surname" : "Guerra", "username" : "user240", "age" : 39, "email" : "Sara.Guerra@gmail.com", "bloodType" : "O+", "id_num" : "728855810501", "registerDate" : ISODate("2015-06-01T10:59:43.743Z"), "ticketNumber" : 2947, "jobs" : [ "Comércio Exterior", "Estudos de Mídia" ], "favFruits" : [ "Maçã" ], "movies" : [ { "title" : "Intocáveis (2011)", "rating" : 2.15 }, { "title" : "O Senhor dos Anéis: As Duas Torres (2002)", "rating" : 3.71 }, { "title" : "Um Estranho no Ninho (1975)", "rating" : 2.04 }, { "title" : "Guerra nas Estrelas (1977)", "rating" : 3.95 } ], "cat" : { "name" : "Luca", "age" : 9 } }
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e37"), "surname" : "De Rosa", "age" : 53, "favFruits" : [ "Uva", "Banana", "Mamão" ], "cat" : { "name" : "Giacomo", "age" : 8 }, "dog" : { "name" : "Alberto", "age" : 7 } }
 >
->{ "_id" : ObjectId("5eab602a9fb59243e5f97ecf"), "firstname" : "Veronica", "surname" : "Ricci", "username" : "user268", "age" : 50, "email" : "Veronica.Ricci@hotmail.com", "bloodType" : "A-", "id_num" : "026775743006", "registerDate" : ISODate("2007-02-16T16:13:28.842Z"), "ticketNumber" : 8278, "jobs" : [ "Engenharia Acústica", "Gestão de Turismo" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "O Senhor dos Anéis: As Duas Torres (2002)", "rating" : 0.01 } ], "cat" : { "name" : "Alessandra", "age" : 10 } }
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e3a"), "surname" : "Milani", "age" : 54, "favFruits" : [ "Banana", "Kiwi", "Pêssego" ], "cat" : { "name" : "Patrizia", "age" : 7 }, "dog" : { "name" : "Sonia", "age" : 17 } }
+
+Mas quantos são?
 
 ```javascript
 db.italians.count({
     $and: [
-        { $or: [ { "favFruits": ["Banana"] }, { "favFruits": ["Maçã"] } ] } ,
+        { "favFruits": {"$in" : ["Banana","Maçã"] } },
         { $or: [ { "dog": { $exists: true } }, { "cat": { $exists: true } } ] } ,
         { "age": { $gt: 20 } }, { "age": { $lt: 60 } }
-    ]
-})
+    ]},
+    { "firstName": 1, "surname": true, "age": true, "cat": true, "dog":true, "favFruits": true}
+    )
 ```
-> 257
+
+> 1340
