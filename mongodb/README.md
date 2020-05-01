@@ -365,6 +365,128 @@ db.italians.aggregate([
 
 ### 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
 
+`db.italians.aggregate( [ { $group : { _id : "$firstname" } } ] )`
+>
+>{ "_id" : "Marta" }
+>
+>{ "_id" : "Elisa" }
+>
+>{ "_id" : "Martina" }
+>
+>{ "_id" : "Silvia" }
+>
+>{ "_id" : "Stefania" }
+>
+>{ "_id" : "Cristina" }
+>
+>{ "_id" : "Giulia" }
+>
+>{ "_id" : "Paolo" }
+>
+>{ "_id" : "Angela" }
+>
+>{ "_id" : "Massimo" }
+>
+>{ "_id" : "Sabrina" }
+>
+>{ "_id" : "Elena" }
+>
+>{ "_id" : "Simone" }
+>
+>{ "_id" : "Anna" }
+>
+>{ "_id" : "Domenico" }
+>
+>{ "_id" : "Giusy" }
+>
+>{ "_id" : "Veronica" }
+>
+>{ "_id" : "Valeira" }
+>
+>{ "_id" : "Filipo" }
+>
+>{ "_id" : "Fabrizio" }
+>
+>Type "it" for more
+
 ### 19. Agora faça a mesma lista do item acima, considerando nome completo
 
+`db.italians.aggregate( [ { $group : { _id : {"firstName": "$firstname", "surname": "$surname" } } } ] )`
+>
+>{ "_id" : { "firstName" : "Pietro", "surname" : "Longo" } }
+>
+>{ "_id" : { "firstName" : "Sara", "surname" : "Conte" } }
+>
+>{ "_id" : { "firstName" : "Andrea", "surname" : "Colombo" } }
+>
+>{ "_id" : { "firstName" : "Martina", "surname" : "Pagano" } }
+>
+>{ "_id" : { "firstName" : "Matteo", "surname" : "Marini" } }
+>
+>{ "_id" : { "firstName" : "Valentina", "surname" : "Esposito" } }
+>
+>{ "_id" : { "firstName" : "Laura", "surname" : "Amato" } }
+>
+>{ "_id" : { "firstName" : "Stefania", "surname" : "Basile" } }
+>
+>{ "_id" : { "firstName" : "Pasquale", "surname" : "Sorrentino" } }
+{>
+> "_id" : { "firstName" : "Federica", "surname" : "Rossi" } }
+>
+>{ "_id" : { "firstName" : "Marta", "surname" : "Ferraro" } }
+>
+>{ "_id" : { "firstName" : "Davide", "surname" : "Testa" } }
+>
+>{ "_id" : { "firstName" : "Carlo", "surname" : "Marino" } }
+>
+>{ "_id" : { "firstName" : "Cinzia", "surname" : "Martini" } }
+>
+>{ "_id" : { "firstName" : "Giacomo", "surname" : "Palumbo" } }
+>
+>{ "_id" : { "firstName" : "Rita", "surname" : "Grasso" } }
+>
+>{ "_id" : { "firstName" : "Nicola", "surname" : "Piras" } }
+>
+>{ "_id" : { "firstName" : "Veronica", "surname" : "De Rosa" } }
+>
+>{ "_id" : { "firstName" : "Vincenzo", "surname" : "Parisi" } }
+>
+>{ "_id" : { "firstName" : "Antonio", "surname" : "Vitali" } }
+>
+>Type "it" for more
+
 ### 20. Procure pessoas que gosta de Banana ou Maçã, tenham cachorro ou gato, mais de 20 e menos de 60 anos
+
+Limitando a cinco documentos
+
+```javascript
+db.italians.find({
+    $and: [
+        { $or: [ { "favFruits": ["Banana"] }, { "favFruits": ["Maçã"] } ] } ,
+        { $or: [ { "dog": { $exists: true } }, { "cat": { $exists: true } } ] } ,
+        { "age": { $gt: 20 } }, { "age": { $lt: 60 } }
+    ]
+}).limit(5)
+```
+
+>
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e3d"), "firstname" : "Mattia", "surname" : "Conti", "username" : "user122", "age" : 50, "email" : "Mattia.Conti@outlook.com", "bloodType" : "AB-", "id_num" : "138306201627", "registerDate" : ISODate("2008-04-04T22:42:55.168Z"), "ticketNumber" : 9040, "jobs" : [ "Eletrotécnica Industrial", "Publicidade e Propaganda" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Gladiador (2000)", "rating" : 4.88 }, { "title" : "O Senhor dos Anéis: O Retorno do Rei (2003)", "rating" : 1.56 }, { "title" : "1917 (2019)", "rating" : 4.54 }, { "title" : "Batman: O Cavaleiro das Trevas (2008)", "rating" : 1.3 } ], "father" : { "firstname" : "Paolo", "surname" : "Conti", "age" : 73 }, "cat" : { "name" : "Mattia", "age" : 11 }, "dog" : { "name" : "Sara", "age" : 7 } }
+>
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e69"), "firstname" : "Patrizia", "surname" : "Sala", "username" : "user166", "age" : 23, "email" : "Patrizia.Sala@live.com", "bloodType" : "AB+", "id_num" : "011850278304", "registerDate" : ISODate("2011-10-04T00:56:43.376Z"), "ticketNumber" : 582, "jobs" : [ "Eletrônica Industrial", "Gestão da Informação" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "Um Estranho no Ninho (1975)", "rating" : 4.68 } ], "father" : { "firstname" : "Angelo", "surname" : "Sala", "age" : 40 }, "dog" : { "name" : "Eleonora", "age" : 16 } }
+>
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97e9a"), "firstname" : "Barbara", "surname" : "Vitali", "username" : "user215", "age" : 36, "email" : "Barbara.Vitali@hotmail.com", "bloodType" : "B-", "id_num" : "663142587063", "registerDate" : ISODate("2014-09-24T06:17:21.693Z"), "ticketNumber" : 3378, "jobs" : [ "Conservação e Restauro" ], "favFruits" : [ "Maçã" ], "movies" : [ { "title" : "Três Homens em Conflito (1966)", "rating" : 2.1 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 3.35 }, { "title" : "Pulp Fiction: Tempo de Violência (1994)", "rating" : 1.23 }, { "title" : "Pulp Fiction: Tempo de Violência (1994)", "rating" : 4.29 }, { "title" : "O Poderoso Chefão (1972)", "rating" : 0.38 } ], "dog" : { "name" : "Paola", "age" : 17 } }
+>
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97eb3"), "firstname" : "Sara", "surname" : "Guerra", "username" : "user240", "age" : 39, "email" : "Sara.Guerra@gmail.com", "bloodType" : "O+", "id_num" : "728855810501", "registerDate" : ISODate("2015-06-01T10:59:43.743Z"), "ticketNumber" : 2947, "jobs" : [ "Comércio Exterior", "Estudos de Mídia" ], "favFruits" : [ "Maçã" ], "movies" : [ { "title" : "Intocáveis (2011)", "rating" : 2.15 }, { "title" : "O Senhor dos Anéis: As Duas Torres (2002)", "rating" : 3.71 }, { "title" : "Um Estranho no Ninho (1975)", "rating" : 2.04 }, { "title" : "Guerra nas Estrelas (1977)", "rating" : 3.95 } ], "cat" : { "name" : "Luca", "age" : 9 } }
+>
+>{ "_id" : ObjectId("5eab602a9fb59243e5f97ecf"), "firstname" : "Veronica", "surname" : "Ricci", "username" : "user268", "age" : 50, "email" : "Veronica.Ricci@hotmail.com", "bloodType" : "A-", "id_num" : "026775743006", "registerDate" : ISODate("2007-02-16T16:13:28.842Z"), "ticketNumber" : 8278, "jobs" : [ "Engenharia Acústica", "Gestão de Turismo" ], "favFruits" : [ "Banana" ], "movies" : [ { "title" : "O Senhor dos Anéis: As Duas Torres (2002)", "rating" : 0.01 } ], "cat" : { "name" : "Alessandra", "age" : 10 } }
+
+```javascript
+db.italians.count({
+    $and: [
+        { $or: [ { "favFruits": ["Banana"] }, { "favFruits": ["Maçã"] } ] } ,
+        { $or: [ { "dog": { $exists: true } }, { "cat": { $exists: true } } ] } ,
+        { "age": { $gt: 20 } }, { "age": { $lt: 60 } }
+    ]
+})
+```
+> 257
