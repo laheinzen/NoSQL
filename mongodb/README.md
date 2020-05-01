@@ -236,7 +236,6 @@ Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso d
 > { "firstname" : "Riccardo", "age" : 79 }
 >
 > { "firstname" : "Angelo", "age" : 78 }
->
 > { "firstname" : "Michela", "age" : 78 }
 
 ### 13. Crie um italiano que tenha um leão como animal de estimação. Associe um nome e idade ao bichano
