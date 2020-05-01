@@ -29,7 +29,7 @@ Hum... Aparentemente é a mesma reposta que lá adiante. Então imagino que seja
 
 ### Exercise 2.2: View the retrieved results as a table
 
-```javascript
+```cypher
 {
   "title": "Jerry Maguire",
   "tagline": "The rest of his life begins now.",
@@ -63,7 +63,7 @@ Hum... Aparentemente é a mesma reposta que lá adiante. Então imagino que seja
 
 ### Exercise 2.6: Display more user-friendly headers in the table
 
-```javascript
+```cypher
 MATCH (m:Movie) RETURN m.title AS `Movie Title`, m.released AS `Release Year`, m.tagline As Tagline
 ```
 
@@ -195,73 +195,263 @@ Esse aqui tive não estava no PDF, mas não foi difícil de achar
 
 ### Exercise 5.9: Retrieve nodes as lists and return data associated with the corresponding lists
 
+Filmes e seus críticos
+
+`MATCH (c:Person)-[:REVIEWED]->(m:Movie) RETURN m, count(c), collect(c)`
+
 ### Exercise 5.10: Retrieve nodes and their relationships as lists
+
+Diretores, produtores, filmes
+
+`MATCH (d:Person)-[:DIRECTED]->(m:Movie)<-[:PRODUCED]-(p:Person) RETURN d, count(p) , collect(m), collect(p)`
 
 ### Exercise 5.11: Retrieve the actors who have acted in exactly five movies
 
+`MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  a, count(a) AS totalMovies, collect(m) AS movies WHERE totalMovies = 5 RETURN a, movies`
+
 ### Exercise 5.12: Retrieve the movies that have at least 2 directors with other optional data
+
+Filmes com ao menos 2 diretores e que teve críticas
+
+`MATCH (m:Movie) WITH m, size((:Person)-[:DIRECTED]->(m)) AS numberOfDirectors WHERE numberOfDirectors >= 2 OPTIONAL MATCH (p:Person)-[:REVIEWED]->(m) RETURN  m, p`
 
 ## Exercício 6 – Controlling results returned
 
 ### Exercise 6.1: Execute a query that returns duplicate records
 
+Filmes lançados nos anos 90 e seus diretores
+
+`MATCH (d:Person)-[:DIRECTED]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, m.title, collect(d)`
+
 ### Exercise 6.2: Modify the query to eliminate duplication
+
+Eliminando duplicidade de anos
+
+`MATCH (d:Person)-[:DIRECTED]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(m.title), collect(d)`
 
 ### Exercise 6.3: Modify the query to eliminate more duplication
 
+Eliminando filmes duplicaos
+
+`MATCH (d:Person)-[:DIRECTED]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(distinct m.title), collect(d)`
+
 ### Exercise 6.4: Sort results returned
+
+Ordenando os anos por filme
+
+`MATCH (d:Person)-[:DIRECTED]->(m:Movie) WHERE m.released >= 1990 AND m.released < 2000 RETURN  m.released, collect(distinct m.title), collect(d) ORDER BY m.released`
 
 ### Exercise 6.5: Retrieve the top 5 ratings and their associated movies
 
+`MATCH (:Person)-[r:REVIEWED]->(m:Movie) RETURN  m, r ORDER BY r.rating DESC LIMIT 5`
+
 ### Exercise 6.6: Retrieve all actors that have not appeared in more than 3 movies
+
+`MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WITH  a, count(a) AS totalMovies, collect(m) AS movies WHERE totalMovies <= 3 RETURN a`
 
 ## Exercício 7 – Working with cypher data
 
+Vamos passar a identar para ficar mais fácil a visualização
+
 ### Exercise 7.1: Collect and use lists
+
+Diretores e produtores de filmes, ordenando pelo número de diretores
+
+```cypher
+MATCH (d:Person)-[:DIRECTED ]->(m:Movie),
+      (m)<-[:PRODUCED]-(p:Person)
+WITH  m, collect(DISTINCT d.name) AS directors, collect(DISTINCT p.name) AS producers
+RETURN DISTINCT m.title,directors, producers
+ORDER BY size(directors)
+```
 
 ### Exercise 7.2: Collect a list
 
+Atores com mais de cinco filmes
+
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH p, collect(m) AS movies
+WHERE size(movies)  > 5
+RETURN p, movies
+```
+
 ### Exercise 7.3: Unwind a list
 
+Atores com mais de cinco filmes e UNWIND
+
+```cypher
+MATCH (p:Person)-[:ACTED_IN]->(m:Movie)
+WITH p, collect(m) AS movies
+WHERE size(movies)  > 5
+WITH p, movies UNWIND movies AS movie
+RETURN p, movie
+```
+
 ### Exercise 7.4: Perform a calculation with the date type
+
+Filmes onde Gene Hackman atuou, há quanto tempo filme foi lançado e idade que ele tinha quando fez o filme
+
+```cypher
+MATCH (a:Person)-[:ACTED_IN]->(m:Movie)
+WHERE a.name = 'Gene Hackman'
+RETURN  m.title, m.released, date().year  - m.released as yearsAgoReleased, m.released  - a.born AS geneAge
+ORDER BY yearsAgoReleased
+```
 
 ## Exercício 8 – Creating nodes
 
 ### Exercise 8.1: Create a Movie node
 
+`CREATE (:Movie {title: 'The Lion King'})`
+> Added 1 label, created 1 node, set 1 property, completed in less than 1 ms.
+
 ### Exercise 8.2: Retrieve the newly-created node
+
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+RETURN m
+```
 
 ### Exercise 8.3: Create a Person node
 
+`CREATE (:Person {name: 'Matthew Broderick'})`
+> Added 1 label, created 1 node, set 1 property, completed after 1 ms
+
 ### Exercise 8.4: Retrieve the newly-created node
+
+```cypher
+MATCH (p:Person)
+WHERE p.name = 'Matthew Broderick'
+RETURN p
+```
 
 ### Exercise 8.5: Add a label to a node
 
+```cypher
+MATCH (m:Movie)
+WHERE m.released >= 1990 and m.released < 2000
+SET m:ninetiesMovie
+```
+
+>Added 20 labels, completed after 8 ms.
+
 ### Exercise 8.6: Retrieve the node using the new label
+
+```cypher
+MATCH (m:ninetiesMovie)
+RETURN m
+```
 
 ### Exercise 8.7: Add the Female label to selected nodes
 
+```cypher
+MATCH (p:Person)
+WHERE p.name STARTS WITH 'Carrie'
+SET p:Female
+```
+
+> Added 2 labels, completed after 6 ms.
+
 ### Exercise 8.8: Retrieve all Female nodes
+
+```cypher
+MATCH (p:Female)
+RETURN p
+```
 
 ### Exercise 8.9: Remove the Female label from the nodes that have this label
 
+```cypher
+MATCH (p:Female)
+REMOVE p:Female
+```
+
+> Removed 2 labels, completed after 1 ms.
+
 ### Exercise 8.10: View the current schema of the graph
+
+`call db.schema.visualization()`
 
 ### Exercise 8.11: Add properties to a movie
 
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+SET m:ninetiesMovie,
+    m.released = 1994,
+    m.tagline = "The greatest adventure of all is finding our place in the circle of life. The King Has Returned.",
+    m.lengthInMinutes = 99
+ ```
+
+ > Added 1 labels, set 3 properties, completed after 13 ms.
+
 ### Exercise 8.12: Retrieve an OlderMovie node to confirm the label and properties
+
+Bom... eu usei NinetiesMovie. Então...
+
+```cypher
+MATCH (m:NinetiesMovie)
+WHERE m.title = 'The Lion King'
+RETURN m
+```
 
 ### Exercise 8.13: Add properties to the person, Robin Wright
 
+De novo... O meu novo ator é o Matthew Broderick
+
+```cypher
+MATCH (p:Person)
+WHERE p.name = 'Matthew Broderick'
+SET p.born = 1962, p.birthPlace = 'Manhattan'
+```
+
+> Set 2 properties, completed after 6 ms.
+
 ### Exercise 8.14: Retrieve an updated Person node
+
+```cypher
+MATCH (p:Person)
+WHERE p.name = 'Matthew Broderick'
+RETURN p
+```
 
 ### Exercise 8.15: Remove a property from a Movie node
 
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+SET m.tagline = null
+```
+
+> Set 1 properties, completed after 4 ms.
+
 ### Exercise 8.16: Retrieve the node to confirm that the property has been removed
+
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+RETURN m
+```
 
 ### Exercise 8.17: Remove a property from a Person node
 
+```cypher
+MATCH (p:Person)
+WHERE p.name = 'Matthew Broderick'
+REMOVE p.birthPlace
+```
+
+> Set 1 property, completed after 1 ms.
+
 ### Exercise 8.18: Retrieve the node to confirm that the property has been removed
+
+```cypher
+MATCH (p:Person)
+WHERE p.name = 'Matthew Broderick'
+RETURN p
+```
 
 ## Exercício 9 – Creating relationships
 
