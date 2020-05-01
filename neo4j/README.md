@@ -15,17 +15,17 @@ Hum... Aparentemente é a mesma reposta que lá adiante. Então imagino que seja
 
 ### Exercise 1.3: Retrieve all Person nodes
 
-`MATCH (n:Person) RETURN n`
+`MATCH (p:Person) RETURN p`
 
 ### Exercise 1.4: Retrieve all Movie nodes
 
-`MATCH (n:Movie) RETURN n`
+`MATCH (m:Movie) RETURN m`
 
 ## Exercício 2 – Filtering queries using property values
 
 ### Exercise 2.1: Retrieve all movies that were released in a specific year
 
-`MATCH (n:Movie {released: 2000}) RETURN n`
+`MATCH (m:Movie {released: 2000}) RETURN m`
 
 ### Exercise 2.2: View the retrieved results as a table
 
@@ -55,7 +55,7 @@ Hum... Aparentemente é a mesma reposta que lá adiante. Então imagino que seja
 
 ### Exercise 2.4: Retrieve all Movies released in a specific year, returning their titles
 
-`MATCH (n:Movie {released: 2000}) RETURN n.title`
+`MATCH (m:Movie {released: 2000}) RETURN m.title`
 
 ### Exercise 2.5: Display title, released, and tagline values for every Movie node in the graph
 
@@ -79,55 +79,114 @@ MATCH (m:Movie) RETURN m.title AS `Movie Title`, m.released AS `Release Year`, m
 
 ### Exercise 3.3: Retrieve all movies that are connected to the person Tom Hanks
 
-`MATCH (m:Movie)--(p:Person {name:"Tom Hanks"}) RETURN p,m`
+`MATCH (m:Movie)--(p:Person {name:"Tom Hanks"}) RETURN m`
 
 ### Exercise 3.4: Retrieve information about the relationships Tom Hanks had with the set of movies retrieved earlier
 
+`MATCH (m:Movie)-[relationship]-(p:Person {name:"Tom Hanks"}) RETURN m,type(relationship)`
+
 ### Exercise 3.5: Retrieve information about the roles that Tom Hanks acted in
+
+`MATCH (m:Movie)-[relationship:ACTED_IN]-(p:Person {name:"Tom Hanks"}) RETURN m,relationship.roles`
 
 ## Exercício 4 – Filtering queries using WHERE clause
 
 ### Exercise 4.1: Retrieve all movies that Tom Cruise acted in
 
+`MATCH (m:Movie)-[relationship:ACTED_IN]-(p:Person) WHERE p.name = "Tom Cruise" RETURN m`
+
 ### Exercise 4.2: Retrieve all people that were born in the 70’s
+
+`MATCH (p:Person) WHERE (p.born >= 1970 AND p.born < 1980) RETURN p`
 
 ### Exercise 4.3: Retrieve the actors who acted in the movie The Matrix who were born after 1960
 
+`MATCH (m:Movie)-[relationship:ACTED_IN]-(p:Person) WHERE (m.title = "The Matrix" AND p.born > 1960) RETURN p`
+
 ### Exercise 4.4: Retrieve all movies by testing the node label and a property
+
+Todos os filmes lançados em 2000
+
+`MATCH (m) WHERE m:Movie AND m.released = 2000 RETURN m`
 
 ### Exercise 4.5: Retrieve all people that wrote movies by testing the relationship between two nodes
 
+`MATCH (m:Movie)-[relationship]-(p:Person) WHERE type(relationship) = "WROTE" return p`
+
 ### Exercise 4.6: Retrieve all people in the graph that do not have a property
+
+Pessoas sem data de nascimento cadastrada
+
+`MATCH (p:Person) WHERE NOT exists(p.born) RETURN p`
 
 ### Exercise 4.7: Retrieve all people related to movies where the relationship has a property
 
+Todos os papéis em filmes
+`MATCH (p:Person)-[relationship]->(m:Movie) WHERE exists(relationship.roles) RETURN p, relationship, m`
+
 ### Exercise 4.8: Retrieve all actors whose name begins with James
 
-### Exercise 4.9: Retrieve all all REVIEW relationships from the graph with filtered results
+`MATCH (a:Person)-[:ACTED_IN]->(m:Movie) WHERE a.name STARTS WITH 'James' RETURN a`
+
+### Exercise 4.9: Retrieve all REVIEW relationships from the graph with filtered results
+
+Todas as críticas que contém a palavra 'cool'
+
+`MATCH (c:Person)-[r:REVIEWED]->(m:Movie) WHERE toLower(r.summary) CONTAINS 'cool' RETURN r`
 
 ### Exercise 4.10: Retrieve all people who have produced a movie, but have not directed a movie
 
+`MATCH (p:Person)-[:PRODUCED]->(m:Movie) WHERE NOT ((p)-[:DIRECTED]->(:Movie)) RETURN p, m`
+
 ### Exercise 4.11: Retrieve the movies and their actors where one of the actors also directed the movie
+
+`MATCH (p1:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(p2:Person) WHERE exists( (p2)-[:DIRECTED]->(m) ) RETURN  p1, p2, m`
 
 ### Exercise 4.12: Retrieve all movies that were released in a set of years
 
+`MATCH (m:Movie) WHERE m.released in [2002, 2004, 2006] RETURN m`
+
 ### Exercise 4.13: Retrieve the movies that have an actor’s role that is the name of the movie
+
+`MATCH (a:Person)-[r:ACTED_IN]->(m:Movie) WHERE m.title in r.roles RETURN m`
 
 ## Exercício 5 – Controlling query processing
 
 ### Exercise 5.1: Retrieve data using multiple MATCH patterns
 
+Filmes onde Tom Hanks atuou, com nome do diretor e outros atores
+`MATCH (a:Person)-[:ACTED_IN]->(m:Movie)<-[:DIRECTED]-(d:Person), (aa:Person)-[:ACTED_IN]->(m) WHERE a.name = 'Tom Hanks' RETURN m, d, aa`
+
 ### Exercise 5.2: Retrieve particular nodes that have a relationship
+
+`MATCH (p1:Person)-[:FOLLOWS]-(p2:Person) WHERE p1.name = 'James Thompson' RETURN p1, p2`
 
 ### Exercise 5.3: Modify the query to retrieve nodes that are exactly three hops away
 
+`MATCH (p1:Person)-[:FOLLOWS*3]-(p2:Person) WHERE p1.name = 'James Thompson' RETURN p1, p2`
+
 ### Exercise 5.4: Modify the query to retrieve nodes that are one and two hops away
+
+`MATCH (p1:Person)-[:FOLLOWS*1..2]-(p2:Person) WHERE p1.name = 'James Thompson' RETURN p1, p2`
 
 ### Exercise 5.5: Modify the query to retrieve particular nodes that are connected no matter how many hops are required
 
+`MATCH (p1:Person)-[:FOLLOWS*]-(p2:Person) WHERE p1.name = 'James Thompson' RETURN p1, p2`
+
 ### Exercise 5.6: Specify optional data to be retrieved during the query
 
+Filmes onde 'Tom' atuou e opcionalmente 'Tom' dirigiu
+`MATCH (p:Person) WHERE p.name STARTS WITH 'Tom' OPTIONAL MATCH (p)-[:DIRECTED]->(m:Movie) RETURN p, m`
+
 ### Exercise 5.7: Retrieve nodes by collecting a list
+
+Atores e seus filmes
+`MATCH (a:Person)-[:ACTED_IN]->(m:Movie) RETURN a , collect(m)`
+
+### 5.8: Retrieve all movies that Tom Cruise has acted in and the co-actors that acted in the same movie by collecting a list
+
+Esse aqui tive não estava no PDF, mas não foi difícil de achar
+`MATCH (t:Person)-[:ACTED_IN]->(m:Movie)<-[:ACTED_IN]-(a:Person) WHERE t.name ='Tom Cruise' RETURN m, collect(a)`
 
 ### Exercise 5.9: Retrieve nodes as lists and return data associated with the corresponding lists
 
