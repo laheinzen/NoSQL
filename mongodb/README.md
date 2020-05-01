@@ -247,6 +247,7 @@ Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso d
 ### 14. Infelizmente o Leão comeu o italiano. Remova essa pessoa usando o Id
 
 `var iDForDonatelloTheNinjaTurtle = db.italians.findOne({"firstname":"Donatello", "surname":"Splinterson"}, {_id:1})`
+
 `db.italians.deleteOne({_id: iDForDonatelloTheNinjaTurtle._id})`
 > { "acknowledged" : true, "deletedCount" : 1 }
 
