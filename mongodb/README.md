@@ -323,6 +323,8 @@ E por aí vai.
 
 ### 17. Utilizando o framework agregate, liste apenas as pessoas com nomes iguais a sua respectiva mãe e que tenha gato ou cachorro
 
+Aqui parti do que estava no PDF. Mas é estranho mostar 'isEqual: 0'. O $cmp retorna 0 se as expresões são equivalentes. Então mudei para cmpResult.
+
 ```javascript
 db.italians.aggregate([
     {'$match': { mother: { $exists: true} }},
@@ -332,34 +334,34 @@ db.italians.aggregate([
         "mother": true,
         "cat": true,
         "dog": true,
-        "isEqual": { "$cmp": ["$firstname","$mother.firstname"]}
+        "cmpResult": { "$cmp": ["$firstname","$mother.firstname"]}
         }
     },
-    {'$match': {"isEqual": 0}}
+    {'$match': {"cmpResult": 0}}
 ])
 ```
 
-> { "_id" : ObjectId("5eab602c9fb59243e5f9856b"), "firstname" : "Lucia", "mother" : { "firstname" : "Lucia", "surname" : "Bellini", "age" : 59 }, "dog" : { "name" : "Gianluca", "age" : 12 }, "isEqual" : 0 }
+> { "_id" : ObjectId("5eab602c9fb59243e5f9856b"), "firstname" : "Lucia", "mother" : { "firstname" : "Lucia", "surname" : "Bellini", "age" : 59 }, "dog" : { "name" : "Gianluca", "age" : 12 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60309fb59243e5f9900a"), "firstname" : "Davide", "mother" : { "firstname" : "Davide", "surname" : "Montanari", "age" : 93 }, "cat" : { "name" : "Giusy", "age" : 17 }, "dog" : { "name" : "Alessio", "age" : 11 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60309fb59243e5f9900a"), "firstname" : "Davide", "mother" : { "firstname" : "Davide", "surname" : "Montanari", "age" : 93 }, "cat" : { "name" : "Giusy", "age" : 17 }, "dog" : { "name" : "Alessio", "age" : 11 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60349fb59243e5f9916c"), "firstname" : "Elisa", "mother" : { "firstname" : "Elisa", "surname" : "Mazza", "age" : 96 }, "dog" : { "name" : "Massimo", "age" : 5 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60349fb59243e5f9916c"), "firstname" : "Elisa", "mother" : { "firstname" : "Elisa", "surname" : "Mazza", "age" : 96 }, "dog" : { "name" : "Massimo", "age" : 5 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60369fb59243e5f99519"), "firstname" : "Andrea", "mother" : { "firstname" : "Andrea", "surname" : "Grassi", "age" : 82 }, "cat" : { "name" : "Antonella", "age" : 11 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60369fb59243e5f99519"), "firstname" : "Andrea", "mother" : { "firstname" : "Andrea", "surname" : "Grassi", "age" : 82 }, "cat" : { "name" : "Antonella", "age" : 11 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60369fb59243e5f9952e"), "firstname" : "Lucia", "mother" : { "firstname" : "Lucia", "surname" : "Colombo", "age" : 102 }, "cat" : { "name" : "Sara", "age" : 19 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60369fb59243e5f9952e"), "firstname" : "Lucia", "mother" : { "firstname" : "Lucia", "surname" : "Colombo", "age" : 102 }, "cat" : { "name" : "Sara", "age" : 19 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab603a9fb59243e5f9993f"), "firstname" : "Emanuela", "mother" : { "firstname" : "Emanuela", "surname" : "Costa", "age" : 36 }, "cat" : { "name" : "Giorgio", "age" : 6 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab603a9fb59243e5f9993f"), "firstname" : "Emanuela", "mother" : { "firstname" : "Emanuela", "surname" : "Costa", "age" : 36 }, "cat" : { "name" : "Giorgio", "age" : 6 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab603b9fb59243e5f99a7a"), "firstname" : "Angela", "mother" : { "firstname" : "Angela", "surname" : "Bernardi", "age" : 77 }, "cat" : { "name" : "Lucia", "age" : 13 }, "dog" : { "name" : "Nicola", "age" : 18 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab603b9fb59243e5f99a7a"), "firstname" : "Angela", "mother" : { "firstname" : "Angela", "surname" : "Bernardi", "age" : 77 }, "cat" : { "name" : "Lucia", "age" : 13 }, "dog" : { "name" : "Nicola", "age" : 18 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab603f9fb59243e5f99c51"), "firstname" : "Giacomo", "mother" : { "firstname" : "Giacomo", "surname" : "Montanari", "age" : 69 }, "cat" : { "name" : "Giorgio", "age" : 6 }, "dog" : { "name" : "Cinzia", "age" : 11 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab603f9fb59243e5f99c51"), "firstname" : "Giacomo", "mother" : { "firstname" : "Giacomo", "surname" : "Montanari", "age" : 69 }, "cat" : { "name" : "Giorgio", "age" : 6 }, "dog" : { "name" : "Cinzia", "age" : 11 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab603f9fb59243e5f99e70"), "firstname" : "Daniela", "mother" : { "firstname" : "Daniela", "surname" : "Greco", "age" : 55 }, "cat" : { "name" : "Federica", "age" : 14 }, "dog" : { "name" : "Antonio", "age" : 5 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab603f9fb59243e5f99e70"), "firstname" : "Daniela", "mother" : { "firstname" : "Daniela", "surname" : "Greco", "age" : 55 }, "cat" : { "name" : "Federica", "age" : 14 }, "dog" : { "name" : "Antonio", "age" : 5 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60449fb59243e5f9a318"), "firstname" : "Emanuela", "mother" : { "firstname" : "Emanuela", "surname" : "Rinaldi", "age" : 74 }, "dog" : { "name" : "Fabrizio", "age" : 4 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60449fb59243e5f9a318"), "firstname" : "Emanuela", "mother" : { "firstname" : "Emanuela", "surname" : "Rinaldi", "age" : 74 }, "dog" : { "name" : "Fabrizio", "age" : 4 }, "cmpResult" : 0 }
 >
->{ "_id" : ObjectId("5eab60449fb59243e5f9a36b"), "firstname" : "Sara", "mother" : { "firstname" : "Sara", "surname" : "Bianchi", "age" : 51 }, "cat" : { "name" : "Sonia", "age" : 12 }, "isEqual" : 0 }
+>{ "_id" : ObjectId("5eab60449fb59243e5f9a36b"), "firstname" : "Sara", "mother" : { "firstname" : "Sara", "surname" : "Bianchi", "age" : 51 }, "cat" : { "name" : "Sonia", "age" : 12 }, "cmpResult" : 0 }
 
 ### 18. Utilizando aggregate framework, faça uma lista de nomes única de nomes. Faça isso usando apenas o primeiro nome
 
