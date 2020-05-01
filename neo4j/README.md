@@ -11,6 +11,8 @@
 
 `call db.schema.visualization()`
 
+Hum... Aparentemente é a mesma reposta que lá adiante. Então imagino que seja apenas para visualizar o grafo e tentar entender. Já havia observado como é intressante a visualização.
+
 ### Exercise 1.3: Retrieve all Person nodes
 
 `MATCH (n:Person) RETURN n`
@@ -57,21 +59,27 @@
 
 ### Exercise 2.5: Display title, released, and tagline values for every Movie node in the graph
 
-`MATCH (n:Movie) RETURN n.title, n.released, n.tagline`
+`MATCH (m:Movie) RETURN m.title, m.released, m.tagline`
 
 ### Exercise 2.6: Display more user-friendly headers in the table
 
 ```javascript
-MATCH (n:Movie) RETURN n.title AS `Movie Title`, n.released AS `Release Year`, n.tagline As Tagline
+MATCH (m:Movie) RETURN m.title AS `Movie Title`, m.released AS `Release Year`, m.tagline As Tagline
 ```
 
 ## Exercício 3 - Filtering queries using relationships
 
 ### 3.1: Display the schema of the database
 
+`call db.schema.visualization()`
+
 ### Exercise 3.2: Retrieve all people who wrote the movie Speed Racer
 
+`MATCH (n:Person)-[:WROTE]-(:Movie{title:"Speed Racer"}) RETURN n`
+
 ### Exercise 3.3: Retrieve all movies that are connected to the person Tom Hanks
+
+`MATCH (m:Movie)--(p:Person {name:"Tom Hanks"}) RETURN p,m`
 
 ### Exercise 3.4: Retrieve information about the relationships Tom Hanks had with the set of movies retrieved earlier
 
