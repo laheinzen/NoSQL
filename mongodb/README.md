@@ -230,14 +230,25 @@ Dessa vez, vamos listar apenas alguns atributos. Mais velhos primeiro. Em caso d
 
 `db.italians.find({"surname":"Rossi"}, {_id:0,"firstname":1,"age":1}).sort({"age":-1, "firstname":1}).limit(5)`
 > { "firstname" : "Enzo ", "age" : 79 }
+>
 > { "firstname" : "Giacomo", "age" : 79 }
+>
 > { "firstname" : "Riccardo", "age" : 79 }
+>
 > { "firstname" : "Angelo", "age" : 78 }
+>
 > { "firstname" : "Michela", "age" : 78 }
 
 ### 13. Crie um italiano que tenha um leão como animal de estimação. Associe um nome e idade ao bichano
 
+`db.italians.insert({"firstname":"Donatello","surname":"Splinterson","age":15,"username":"dona_the_ninja_turtle","email":"dona@cowabunga.com", "registeredDate":new Date(),"jobs":["Tartaruga Ninja"],"favFood":["Pizza"],"movies":[{title:"O Rei Leão","rating":10},{"title":"Karate Kid","rating":9},{"title":"O grande dragão branco","rating":7}],"lion":{"name":"Simba","age":7}})`
+> WriteResult({ "nInserted" : 1 })
+
 ### 14. Infelizmente o Leão comeu o italiano. Remova essa pessoa usando o Id
+
+`var iDForDonatelloTheNinjaTurtle = db.italians.findOne({"firstname":"Donatello", "surname":"Splinterson"}, {_id:1})`
+`db.italians.deleteOne({_id: iDForDonatelloTheNinjaTurtle._id})`
+> { "acknowledged" : true, "deletedCount" : 1 }
 
 ### 15. Passou um ano. Atualize a idade de todos os italianos e dos bichanos em 1
 
