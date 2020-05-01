@@ -88,15 +88,39 @@ db.pets.insert({name: "Chuck", species: "Gato"})
 
 ### 1. Liste/Conte todas as pessoas que tem exatamente 99 anos. Você pode usar um count para indicar a quantidade
 
+`db.italians.count({"age":99})`
+> 0
+
 ### 2. Identifique quantas pessoas são elegíveis atendimento prioritário (pessoas com mais de 65 anos)
+
+`db.italians.count({"age": {$gt:65} })`
+> 1755
 
 ### 3. Identifique todos os jovens (pessoas entre 12 a 18 anos)
 
+`db.italians.count({"age": {$gte:12,$lte:18} })`
+> 869
+
 ### 4. Identifique quantas pessoas tem gatos, quantas tem cachorro e quantas não tem nenhum dos dois
+
+`db.italians.count({"cat": {$exists: true} })`
+>6037
+
+`db.italians.count({"dog": {$exists: true} })`
+>4047
+
+`db.italians.count({"cat": {$exists: false} , "dog": {$exists: false} })`
+> 2347
 
 ### 5. Liste/Conte todas as pessoas acima de 60 anos que tenham gato
 
+`db.italians.count({ "age": {$gt:60}, "cat": {$exists:true} })`
+> 1420
+
 ### 6. Liste/Conte todos os jovens com cachorro
+
+`db.italians.count({"age": {$gte:12,$lte:18}, "dog": {$exists:true} })`
+> 348
 
 ### 7. Utilizando o $where, liste todas as pessoas que tem gato e cachorro
 
