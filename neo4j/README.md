@@ -573,16 +573,62 @@ REMOVE r.save
 
 ### Exercise 9.13: Confirm that your modifications were made to the graph
 
+```cypher
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE m.title = 'The Matrix'
+return a, r, m
+```
+
 ## Exercício 10 – Deleting nodes and relationships
 
 ### Exercise 10.1: Delete a relationship
 
+```cypher
+MATCH (:Person)-[r:HELPED]-(:Person)
+DELETE r
+```
+
+> Deleted 1 relationship, completed after 3 ms.
+
 ### Exercise 10.2: Confirm that the relationship has been deleted
+
+```cypher
+MATCH (:Person)-[r:HELPED]-(:Person)
+RETURN r
+```
 
 ### Exercise 10.3: Retrieve a movie and all of its relationships
 
+```cypher
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'The Matrix'
+RETURN p, r, m
+```
+
 ### Exercise 10.4: Try deleting a node without detaching its relationships
+
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Matrix'
+DELETE m
+```
+
+> Cannot delete node<0>, because it still has relationships. To delete this node, you must first delete its relationships.
 
 ### Exercise 10.5: Delete a Movie node, along with its relationships
 
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Matrix'
+DETACH DELETE m
+```
+
+> Deleted 1 node, deleted 7 relationships, completed after 4 ms.
+
 ### Exercise 10.6: Confirm that the Movie node has been deleted
+
+```cypher
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'The Matrix'
+RETURN p, r, m
+```
