@@ -425,7 +425,7 @@ WHERE m.title = 'The Lion King'
 SET m.tagline = null
 ```
 
-> Set 1 properties, completed after 4 ms.
+> Set 1 property, completed after 4 ms.
 
 ### Exercise 8.16: Retrieve the node to confirm that the property has been removed
 
@@ -457,27 +457,119 @@ RETURN p
 
 ### Exercise 9.1: Create ACTED_IN relationships
 
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+MATCH (a:Person)
+WHERE a.name = 'Matthew Broderick'
+CREATE (a)-[:ACTED_IN]->(m)
+```
+
+> Created 1 relationship, completed after 4 ms.
+
 ### Exercise 9.2: Create DIRECTED relationships
+
+Ok. Faz de conta. Já que não quero criar mais uma pessoa
+
+```cypher
+MATCH (m:Movie)
+WHERE m.title = 'The Lion King'
+MATCH (p:Person)
+WHERE p.name = 'Tom Hanks'
+CREATE (p)-[:DIRECTED]->(m)
+```
+
+> Created 1 relationship, completed after 2 ms.
 
 ### Exercise 9.3: Create a HELPED relationship
 
+```cypher
+MATCH (k:Person)
+WHERE k.name = 'Keanu Reeves'
+MATCH (c:Person)
+WHERE c.name = 'Carrie-Anne Moss'
+CREATE (k)-[:HELPED]->(c)
+```
+
+> Created 1 relationship, completed after 7 ms.
+
 ### Exercise 9.4: Query nodes and new relationships
+
+```cypher
+MATCH (p:Person)-[r]-(m:Movie)
+WHERE m.title = 'The Matrix'
+RETURN p, r, m
+```
 
 ### Exercise 9.5: Add properties to relationships
 
+Faz de conta que esses são os atores
+
+```cypher
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE m.title = 'The Lion King'
+SET r.roles =
+CASE a.name
+  WHEN 'Matthew Broderick' THEN ['Simba']
+  WHEN 'Tom Hanks' THEN ['Pumba']
+  WHEN 'Tom Cruise' THEN ['Scar']
+END
+```
+
+> Set 3 properties, completed after 5 ms
+
 ### Exercise 9.6: Add a property to the HELPED relationship
+
+```cypher
+MATCH (k:Person)-[r:HELPED]->(c:Person)
+WHERE k.name = 'Keanu Reeves' AND c.name = 'Carrie-Anne Moss'
+SET r.save = 'the world'
+```
+
+> Set 1 property, completed after 5 ms.
 
 ### Exercise 9.7: View the current list of property keys in the graph
 
+`call db.propertyKeys`
+
 ### Exercise 9.8: View the current schema of the graph
+
+`call db.schema.visualization()`
 
 ### Exercise 9.9: Retrieve the names and roles for actors
 
+```cypher
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE m.title = 'The Lion King'
+RETURN a.name, r.roles
+```
+
 ### Exercise 9.10: Retrieve information about any specific relationships
+
+```cypher
+MATCH (p1:Person)-[r:HELPED]-(p2:Person)
+RETURN p1.name, r, p2.name
+```
 
 ### Exercise 9.11: Modify a property of a relationship
 
+```cypher
+MATCH (a:Person)-[r:ACTED_IN]->(m:Movie)
+WHERE m.title = 'The Matrix' AND a.name = 'Laurence Fishburne'
+SET r.roles =['Morpheus / Daniel']
+```
+
+> Set 1 property, completed after 1 ms.
+
 ### Exercise 9.12: Remove a property from a relationship
+
+```cypher
+MATCH (k:Person)-[r:HELPED]->(c:Person)
+WHERE k.name = 'Keanu Reeves' AND c.name = 'Carrie-Anne Moss'
+REMOVE r.save
+```
+
+> Set 1 property, completed after 1 ms.
 
 ### Exercise 9.13: Confirm that your modifications were made to the graph
 
