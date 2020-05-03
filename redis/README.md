@@ -1,15 +1,13 @@
 # Redis
 
- 
 ## Ativar o ambiente
 
-```bash
-docker-compose up redis-server
-```
-Vai ficar rodando. Abrir outro terminal
+Inicialmente havia tentando usando o redis via docker.
 
-## Ativar o cli do redis
+Foi abortado e usado o Windows mesmo.
 
-```bash
-docker-compose run redis-cli
-```
+Para ativar, basta seguir orientações do material, ou seja: chocolatey.
+
+## Código C#
+
+Vamos tentar
