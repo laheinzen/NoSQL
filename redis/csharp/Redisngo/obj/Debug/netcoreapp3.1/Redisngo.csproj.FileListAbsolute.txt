@@ -1,0 +1,4 @@
+D:\luiz.angelo\code\DataScience\NoSQL\NoSQL\redis\csharp\Redisngo\bin\Debug\netcoreapp3.1\Redisngo.exe
+D:\luiz.angelo\code\DataScience\NoSQL\NoSQL\redis\csharp\Redisngo\obj\Debug\netcoreapp3.1\Redisngo.csprojAssemblyReference.cache
+D:\luiz.angelo\code\DataScience\NoSQL\NoSQL\redis\csharp\Redisngo\obj\Debug\netcoreapp3.1\Redisngo.AssemblyInfoInputs.cache
+D:\luiz.angelo\code\DataScience\NoSQL\NoSQL\redis\csharp\Redisngo\obj\Debug\netcoreapp3.1\Redisngo.AssemblyInfo.cs
