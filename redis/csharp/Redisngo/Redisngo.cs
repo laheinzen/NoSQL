@@ -28,12 +28,16 @@ namespace Redisngo
             //Vamos gerar 50 jogadores e 50 cartelas
             for (var u = 1; u <= numberOfUsers; u++)
             {
-                database.HashSet($"user:{u:00}", new HashEntry[]
-                 {
-                    new HashEntry("name", $"user{u:00}"),
-                    new HashEntry("bcartela", $"cartela:{u:00}"),
-                    new HashEntry("bscore", $"score:{0}")
-                 });
+                var hashName = new HashEntry("name", $"user{u:00}");
+                var hashCard = new HashEntry("bcartela", $"cartela:{u:00}");
+                var hashScore = new HashEntry("bscore", $"score:{0}");
+
+                var hashEntries = new HashEntry[3];
+                hashEntries[0] = hashName;
+                hashEntries[1] = hashCard;
+                hashEntries[2] = hashScore;
+
+                database.HashSet($"user:{u:00}", hashEntries);
             }
 
         }

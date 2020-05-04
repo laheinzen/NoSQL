@@ -7,3 +7,7 @@ redis/csharp/Redisngo/obj/Debug/netcoreapp3.1/Redisngo.dll
 *.dll
 redis/csharp/Redisngo/obj/Debug/netcoreapp3.1/Redisngo.csprojAssemblyReference.cache
 redis/csharp/Redisngo/obj/Debug/netcoreapp3.1/Redisngo.csproj.CoreCompileInputs.cache
+*.cache
+*.dll
+*.dll
+redis/csharp/Redisngo/.vs/Redisngo/v16/.suo
