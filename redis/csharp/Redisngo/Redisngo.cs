@@ -29,10 +29,8 @@ namespace Redisngo
         {
             connection = ConnectionMultiplexer.Connect(hostAndPort + ",allowAdmin=true");
             database = connection.GetDatabase();
-            //connection.GetServer(hostAndPort).FlushAllDatabases();
-            //database = connection.GetDatabase();
-            Console.WriteLine("Cuidado... Nós vamos dar um flush no Redis como um todo. Se não é isso que você quer, dê um CTRL+C");
-            Console.ReadKey();
+            //Console.WriteLine("Cuidado... Nós vamos dar um flush no Redis como um todo. Se não é isso que você quer, dê um CTRL+C");
+            //Console.ReadKey();
             connection.GetServer(hostAndPort).FlushAllDatabases();
         }
 
@@ -43,7 +41,6 @@ namespace Redisngo
             var oneToNinetyNineForRedis = Enumerable.Range(lowestNumberPossible, highestNumberPossible).Select (n => (RedisValue)n).ToArray();
             database.SetAdd(possibleNumbersSetName, oneToNinetyNineForRedis);
 
-            int[] initialScores = { 0 };
 
             //Agora vamos gerar 50 jogadores e 50 cartelas
             for (var u = 1; u <= numberOfPlayers; u++)
@@ -51,9 +48,10 @@ namespace Redisngo
                 //Primeiros os dados do jogador
                 var hashName = new HashEntry("name", $"user{u:00}");
                 var hashCard = new HashEntry("bcartela", $"cartela:{u:00}");
-                var hashScore = new HashEntry("bscore", $"score:{0}");
+                //O PDF fala que deve ser armazenacomo 'score:0' mas não faz sentido. 
+                var hashScore = new HashEntry("bscore", 0);
 
-                var hashEntries = new HashEntry[3];
+                var hashEntries = new HashEntry[2];
                 hashEntries[0] = hashName;
                 hashEntries[1] = hashCard; 
                 hashEntries[2] = hashScore;
@@ -69,17 +67,37 @@ namespace Redisngo
 
                 //Guardando os scores iniciais
                 database.SortedSetAdd("scores", $"user:{u:00}", 0);
+
             }
 
         }
-        public void Go() {
+        public void Go()
+        {
             var drawNumber = database.SetRandomMember(possibleNumbersSetName);
             //Sou teimoso. Quero em byte, não em int.
             LastDrawNumber = (byte)((int)(drawNumber));
-            Round++; 
+            Round++;
 
+            //Agora vamos verificar todas as cartelas
+            for (var u = 1; u <= numberOfPlayers; u++)
+            {
+                //Primeiros os dados do jogador
+                var userKey = $"user:{u:00}";
+                //Eu já sei qual é a cartela né? Mas vamos seguir a hash
+                var cardSet = database.HashGet(userKey, "bcartela").ToString();
+
+                //Opa. Se tem o número, vamos aumentar o score do sortudo
+                if (database.SetContains(cardSet, drawNumber)) {
+                    //Primeiro usando o Sorted Set
+                    database.SortedSetIncrement("scores", userKey, 1);
+
+                    //Agora usando o Hash? Meio estranho, mas ok
+                    database.HashIncrement(userKey, "bscore", 1);
+                }
+                   
+
+
+            }
         }
-
-
     }
 }
