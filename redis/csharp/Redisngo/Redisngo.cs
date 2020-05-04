@@ -103,7 +103,6 @@ namespace Redisngo
         }
 
         private void checkForBingo() {
-            //TODO
             //Checar se alguém tem score 15 usando o sorted set
 
             //Buscar scores com mais de 15;
@@ -140,6 +139,25 @@ namespace Redisngo
             }
             NumbersDrawn.Append(LastDrawnNumber);
 
+            bool hashBingo = false;
+            byte hashNumberOfWinners = 0;
+            List<String> hashWinners = new List<string>();
+            //Redudante, checando pelo hash
+            for (byte u = 1; u <= numberOfPlayers; u++) {
+                var userScore = (int)database.HashGet($"user:{u:00}", "bscore");
+                if (userScore == 15) {
+                    hashBingo = true;
+                    hashNumberOfWinners++;
+                    hashWinners.Add($"user:{u:00}");
+                }
+            }
+
+            if (hashBingo) {
+                Console.WriteLine($"\t\tHashSet encontrou {hashNumberOfWinners}  vencedor(es):");
+                foreach (var hashWinner in hashWinners) {
+                    Console.WriteLine($"\t\t\t{hashWinner}");
+                }
+            }
         }
     }
 }
