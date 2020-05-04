@@ -11,6 +11,11 @@ namespace Redisngo
 
         private ConnectionMultiplexer connection;
         private IDatabase database;
+        private byte numberOfPlayers = 50;
+        private byte numbersInACard = 15;
+        private byte lowestNumberPossible = 1;
+        private byte highestNumberPossible = 99;
+        private string possibleNumbersSetName = "possibleNumbers";
 
         public Redisngo(string hostAndPort = "localhost:6379", bool flushAll = false) {
             connection = ConnectionMultiplexer.Connect(hostAndPort + ",allowAdmin=true");
@@ -23,15 +28,12 @@ namespace Redisngo
         }
 
        public void Set() {
-            
-            byte numberOfUsers = 50;
-
-            //Primeiro guardamos os possíveis números (1 a 99)
-            var oneToNinetyNineForRedis = Enumerable.Range(1, 99).Select (n => (RedisValue)n).ToArray();
-            database.SetAdd("possibleCardMembers", oneToNinetyNineForRedis);
+            //Primeiro guardamos os possíveis números de acordo com o parâmetro (convertendo para Valores Redis
+            var oneToNinetyNineForRedis = Enumerable.Range(lowestNumberPossible, highestNumberPossible).Select (n => (RedisValue)n).ToArray();
+            database.SetAdd(possibleNumbersSetName, oneToNinetyNineForRedis);
 
             //Agora vamos gerar 50 jogadores e 50 cartelas
-            for (var u = 1; u <= numberOfUsers; u++)
+            for (var u = 1; u <= numberOfPlayers; u++)
             {
                 //Primeiros os dados do jogador
                 var hashName = new HashEntry("name", $"user{u:00}");
@@ -47,23 +49,10 @@ namespace Redisngo
                 database.HashSet($"user:{u:00}", hashEntries);
 
                 //Agora vamos gerar a cartela
-                var cardNumber01 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber02 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber03 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber04 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber05 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber06 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber07 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber08 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber09 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber10 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber11 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber12 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber13 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber14 = database.SetRandomMember("possibleCardNumbers");
-                var cardNumber15 = database.SetRandomMember("possibleCardNumbers");
-
-
+                var cardNumbers = database.SetRandomMembers(possibleNumbersSetName, numbersInACard).ToArray();
+                
+                //guardando a cartela
+                database.SetAdd($"cartela:{u:00}", cardNumbers);
             }
 
         }
