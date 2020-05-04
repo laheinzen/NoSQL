@@ -7,19 +7,31 @@ namespace Redisngo
         static void Main(string[] args)
         {
             try {
-                Console.WriteLine("Inicializando");
+                //Inicializando
                 var redisngo = new Redisngo();
-                Console.WriteLine("Conectando/Inicializando o Redis");
+                //Conectando/Inicializando o Redis
                 redisngo.Ready();
-                Console.WriteLine("Criando as cartelas para os jogadores");
+                Console.WriteLine("Distribuindo as cartelas.");
                 redisngo.Set();
-                Console.WriteLine("Que começem os jogos");
+                Console.WriteLine("Começando o Bingo. Boa sorte aos jogadores!\n");
+                Console.ReadKey();
+
                 while (!redisngo.IsBingo)
                 {
                     redisngo.Go();
-                    Console.WriteLine($"Rodada número {redisngo.Round}. O número retirado foi o {redisngo.LastDrawnNumber}");
-                    Console.WriteLine($"Resultado da última rodada: {redisngo.LastRoundResult}");
+
+                    //A cada 10 rodadas a gente relembra o que já foi sorteado. 
+                    if (redisngo.Round % 10 == 0) {
+                        Console.WriteLine($"{redisngo.Round} números sorteados até o mommento: {redisngo.NumbersDrawn}\n");
+                        Console.ReadKey();
+                    }
+
+                    Console.WriteLine($"Rodada {redisngo.Round}.");
+                    Console.WriteLine($"\tNúmero retirado: { redisngo.LastDrawnNumber}.");
+                    Console.WriteLine($"\t{redisngo.LastRoundResult}\n");
                 }
+                Console.WriteLine("Bingo encerrado. Espero que todos tenham se divertido!");
+                Console.ReadKey();
             }
             catch (Exception e) {
                 Console.WriteLine($"Exceção do tipo: {e.GetType()} \nMensagem: {e.Message}");

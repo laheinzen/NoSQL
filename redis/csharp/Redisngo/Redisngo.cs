@@ -21,7 +21,7 @@ namespace Redisngo
         public byte LastDrawnNumber { get; private set; }
         public byte Round { get; private set; }
         private List<string> winners;
-        private List<byte> numbersDrawn;
+        public StringBuilder NumbersDrawn { get; private set; }
 
         public Redisngo() {
 
@@ -40,7 +40,7 @@ namespace Redisngo
             IsBingo = false;
             Round = 0;
             winners = new List<string>();
-            numbersDrawn = new List<byte>();
+            NumbersDrawn = new StringBuilder();
             //Primeiro guardamos os possíveis números de acordo com o parâmetro (convertendo para Valores Redis
             var oneToNinetyNineForRedis = Enumerable.Range(lowestNumberPossible, highestNumberPossible).Select (n => (RedisValue)n).ToArray();
             database.SetAdd(possibleNumbersSetName, oneToNinetyNineForRedis);
@@ -79,7 +79,6 @@ namespace Redisngo
             var drawNumber = database.SetRandomMember(possibleNumbersSetName);
             //Sou teimoso. Quero em byte, não em int.
             LastDrawnNumber = (byte)((int)(drawNumber));
-            numbersDrawn.Add(LastDrawnNumber);
             Round++;
 
             //Agora vamos verificar todas as cartelas
@@ -106,9 +105,41 @@ namespace Redisngo
         private void checkForBingo() {
             //TODO
             //Checar se alguém tem score 15 usando o sorted set
-            //Se sim, atualizar IsBingo
+
+            //Buscar scores com mais de 15;
+            var winners = database.SortedSetRangeByScore("scores", 15);
+            var numberOfWinners = winners.Length; 
+
+            //Retorna não vazio? Temos ganahador(es)
+            if (numberOfWinners > 0){
+                IsBingo = true;
+                LastRoundResult = "BINGO! ";
+                if (numberOfWinners == 1) {
+                    LastRoundResult += "O ganhador é: ";
+                }
+                else {
+                    LastRoundResult += "Os ganhadors são: ";
+                }
+
+                //Sempre tem ao menos um ganhador
+                LastRoundResult += winners[0];
+
+                for (byte w = 1; w < numberOfWinners; w++) {
+                    LastRoundResult += ", " + winners[w];
+                }
+                LastRoundResult += ".";
+            } 
+            else  {
+                LastRoundResult = "Ainda não há vencedores.";
+            }
+            
             //Checar também usando o hash? Colocar como comment
-            //Independente disso, atualizar a string Last Round Result
+
+            if (NumbersDrawn.Length > 0 ) {
+                NumbersDrawn.Append(", ");
+            }
+            NumbersDrawn.Append(LastDrawnNumber);
+
         }
     }
 }
