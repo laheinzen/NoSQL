@@ -31,8 +31,8 @@ namespace Redisngo
         {
             connection = ConnectionMultiplexer.Connect(hostAndPort + ",allowAdmin=true");
             database = connection.GetDatabase();
-            //Console.WriteLine("Cuidado... Nós vamos dar um flush no Redis como um todo. Se não é isso que você quer, dê um CTRL+C");
-            //Console.ReadKey();
+            Console.WriteLine("Cuidado... Nós vamos dar um flush no Redis como um todo. Se não é isso que você quer, dê um CTRL+C");
+            Console.ReadKey();
             connection.GetServer(hostAndPort).FlushAllDatabases();
         }
 
