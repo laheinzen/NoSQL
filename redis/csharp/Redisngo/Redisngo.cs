@@ -1,6 +1,7 @@
 ﻿using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Redisngo
@@ -21,13 +22,18 @@ namespace Redisngo
             connection.GetServer(hostAndPort).FlushAllDatabases();
         }
 
-        private byte numberOfUsers = 50;
+       public void Set() {
+            
+            byte numberOfUsers = 50;
 
-        public void Set() {
+            //Primeiro guardamos os possíveis números (1 a 99)
+            var oneToNinetyNineForRedis = Enumerable.Range(1, 99).Select (n => (RedisValue)n).ToArray();
+            database.SetAdd("possibleCardMembers", oneToNinetyNineForRedis);
 
-            //Vamos gerar 50 jogadores e 50 cartelas
+            //Agora vamos gerar 50 jogadores e 50 cartelas
             for (var u = 1; u <= numberOfUsers; u++)
             {
+                //Primeiros os dados do jogador
                 var hashName = new HashEntry("name", $"user{u:00}");
                 var hashCard = new HashEntry("bcartela", $"cartela:{u:00}");
                 var hashScore = new HashEntry("bscore", $"score:{0}");
@@ -37,7 +43,27 @@ namespace Redisngo
                 hashEntries[1] = hashCard;
                 hashEntries[2] = hashScore;
 
+                //Guardamos o hash do jogador/user
                 database.HashSet($"user:{u:00}", hashEntries);
+
+                //Agora vamos gerar a cartela
+                var cardNumber01 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber02 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber03 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber04 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber05 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber06 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber07 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber08 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber09 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber10 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber11 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber12 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber13 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber14 = database.SetRandomMember("possibleCardNumbers");
+                var cardNumber15 = database.SetRandomMember("possibleCardNumbers");
+
+
             }
 
         }
