@@ -18,8 +18,10 @@ namespace Redisngo
         private string possibleNumbersSetName = "possibleCardNumbers";
         public bool IsBingo { get; private set; }
         public string LastRoundResult { get; private set; }
-        public byte LastDrawNumber { get; private set; }
+        public byte LastDrawnNumber { get; private set; }
         public byte Round { get; private set; }
+        private List<string> winners;
+        private List<byte> numbersDrawn;
 
         public Redisngo() {
 
@@ -37,6 +39,8 @@ namespace Redisngo
         public void Set() {
             IsBingo = false;
             Round = 0;
+            winners = new List<string>();
+            numbersDrawn = new List<byte>();
             //Primeiro guardamos os possíveis números de acordo com o parâmetro (convertendo para Valores Redis
             var oneToNinetyNineForRedis = Enumerable.Range(lowestNumberPossible, highestNumberPossible).Select (n => (RedisValue)n).ToArray();
             database.SetAdd(possibleNumbersSetName, oneToNinetyNineForRedis);
@@ -51,7 +55,7 @@ namespace Redisngo
                 //O PDF fala que deve ser armazenacomo 'score:0' mas não faz sentido. 
                 var hashScore = new HashEntry("bscore", 0);
 
-                var hashEntries = new HashEntry[2];
+                var hashEntries = new HashEntry[3];
                 hashEntries[0] = hashName;
                 hashEntries[1] = hashCard; 
                 hashEntries[2] = hashScore;
@@ -67,15 +71,15 @@ namespace Redisngo
 
                 //Guardando os scores iniciais
                 database.SortedSetAdd("scores", $"user:{u:00}", 0);
-
             }
-
         }
+        
         public void Go()
         {
             var drawNumber = database.SetRandomMember(possibleNumbersSetName);
             //Sou teimoso. Quero em byte, não em int.
-            LastDrawNumber = (byte)((int)(drawNumber));
+            LastDrawnNumber = (byte)((int)(drawNumber));
+            numbersDrawn.Add(LastDrawnNumber);
             Round++;
 
             //Agora vamos verificar todas as cartelas
@@ -91,13 +95,20 @@ namespace Redisngo
                     //Primeiro usando o Sorted Set
                     database.SortedSetIncrement("scores", userKey, 1);
 
-                    //Agora usando o Hash? Meio estranho, mas ok
-                    database.HashIncrement(userKey, "bscore", 1);
+                    //Agora usando o Hash
+                    database.HashIncrement(userKey, "bscore");
                 }
-                   
-
-
             }
+
+            checkForBingo();
+        }
+
+        private void checkForBingo() {
+            //TODO
+            //Checar se alguém tem score 15 usando o sorted set
+            //Se sim, atualizar IsBingo
+            //Checar também usando o hash? Colocar como comment
+            //Independente disso, atualizar a string Last Round Result
         }
     }
 }

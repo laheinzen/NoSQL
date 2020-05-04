@@ -17,7 +17,7 @@ namespace Redisngo
                 while (!redisngo.IsBingo)
                 {
                     redisngo.Go();
-                    Console.WriteLine($"Rodada número {redisngo.Round}. O número retirado foi o {redisngo.LastDrawNumber}");
+                    Console.WriteLine($"Rodada número {redisngo.Round}. O número retirado foi o {redisngo.LastDrawnNumber}");
                     Console.WriteLine($"Resultado da última rodada: {redisngo.LastRoundResult}");
                 }
             }
