@@ -52,4 +52,8 @@ O que acabei fazendo foi deixar redundate. Mantenho o score como inteiro no hash
 
 ### Figuras
 
-Aqui vou colocar as figuras demonstrando a execução
+Início do Bingo:
+![Início](https://github.com/laheinzen/NoSQL/blob/master/redis/redisngo01.png "Boa sorte")
+
+Fim do Bingo:
+![Final](https://github.com/laheinzen/NoSQL/blob/master/redis/redisngo02.png "BINGO!")
