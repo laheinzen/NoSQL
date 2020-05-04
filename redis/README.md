@@ -48,4 +48,8 @@ Fazendo assim, dá erro quando tentar usar o `HINCRBY`. Porque não tem um valor
 
 Mas daí vendo o PDF, pede para guardar como `user:01 -> name: “user01”, bcartela: “cartela:01”, bscore: “score:01”`. Como se fosse uma chave para outra estrutura.
 
-O que acabei fazendo foi deixar redundate. Mantenho o score como inteiro no hash e também mantenho o score com Sorted Set. Assim pratica os dois. Mas o cálculo será com base no Score do Sorted Set.   aasdad
+O que acabei fazendo foi deixar redundate. Mantenho o score como inteiro no hash e também mantenho o score com Sorted Set. Assim pratica os dois. Mas o cálculo será com base no Score do Sorted Set.
+
+### Figuras
+
+Aqui vou colocar as figuras demonstrando a execução
